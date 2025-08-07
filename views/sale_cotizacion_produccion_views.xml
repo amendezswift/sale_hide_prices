@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ <template id="report_saleorder_cotizacion_produccion_document">
+      <t t-name="sale_hide_prices.report_saleorder_cotizacion_produccion_document">
+        <t t-call="web.external_layout">
+          <!-- Iteramos cada documento y forzamos un <main> -->
+          <t t-foreach="docs" t-as="doc">
+            <div class="page">
+              <main>
+                <!-- Cabecera con número y fechas -->
+                <h2>Cotización Producción # <span t-field="doc.name"/></h2>
+                <div class="row mb-4">
+                  <div class="col-auto">
+                    <strong>Fecha Cotización:</strong>
+                    <span t-field="doc.date_order" t-options="{'widget':'date'}"/>
+                  </div>
+                  <div class="col-auto" t-if="doc.validity_date">
+                    <strong>Válida Hasta:</strong>
+                    <span t-field="doc.validity_date" t-options="{'widget':'date'}"/>
+                  </div>
+                </div>
+                <!-- Órdenes de Producción asociadas -->
+                <t t-set="mos"
+                t-value="env['mrp.production'].sudo().search([
+                    ('procurement_group_id', '=', doc.procurement_group_id.id),
+                    ('company_id', '=', doc.company_id.id),
+                    ('state', '!=', 'cancel'),
+                ])"/>
+
+                <t t-if="mos">
+                <p>
+                    <strong>Órdenes de Producción:</strong>
+                    <t t-foreach="mos" t-as="mo">
+                    <span t-esc="mo.name"/><t t-if="not loop.last">, </t>
+                    </t>
+                </p>
+                </t>
+                <t t-else="">
+                <!-- Nada si no hay MOs -->
+                </t>
+
+                <!-- Tabla de líneas sin precios -->
+                <table class="table table-sm table-borderless">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Descripción</th>
+                      <th class="text-end">Cantidad</th>
+                      <th class="text-end">Unidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <t t-foreach="doc.order_line" t-as="line">
+                      <tr>
+                        <td><span t-field="line.product_id.display_name"/></td>
+                        <td><span t-field="line.name"/></td>
+                        <td class="text-end"><span t-field="line.product_uom_qty"/></td>
+                        <td class="text-end"><span t-field="line.product_uom.display_name"/></td>
+                      </tr>
+                    </t>
+                  </tbody>
+                </table>
+              </main>
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+
+</odoo>

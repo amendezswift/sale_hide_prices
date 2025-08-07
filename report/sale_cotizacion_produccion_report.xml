@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Acción de reporte: aparece en Print > Cotización Producción -->
+    <record id="action_report_saleorder_cotizacion_produccion" model="ir.actions.report">
+      <field name="name">Cotización Producción</field>
+      <field name="model">sale.order</field>
+      <field name="report_type">qweb-pdf</field>
+      <!-- Nombre técnico del QWeb: módulo.plantilla -->
+      <field name="report_name">sale_hide_prices.report_saleorder_cotizacion_produccion_document</field>
+      <field name="report_file">sale_hide_prices.report_saleorder_cotizacion_produccion_document</field>
+      <field name="print_report_name">'Cotización Producción - %s' % (object.name)</field>
+      <!-- Vinculado al modelo sale.order, binding en menú Print -->
+      <field name="binding_model_id" ref="sale.model_sale_order"/>
+      <field name="binding_type">report</field>
+    </record>
+
+</odoo>
