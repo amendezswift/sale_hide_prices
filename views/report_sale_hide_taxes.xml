@@ -1,0 +1,15 @@
+<odoo>
+  <template id="report_saleorder_document_hide_taxes" inherit_id="sale.report_saleorder_document">
+    
+    <!-- Quitar cabecera de impuestos -->
+    <xpath expr="//th[@name='th_taxes']" position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
+    
+    <!-- Quitar la celda de impuestos en las líneas -->
+    <xpath expr="//td[@name='td_taxes']" position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+  </template>
+</odoo>

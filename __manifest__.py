@@ -8,6 +8,8 @@
     'data': [
         'report/sale_cotizacion_produccion_report.xml',
         'views/sale_cotizacion_produccion_views.xml', 
+        'views/report_sale_hide_taxes.xml', 
+        
     ],
     'installable': True,
     'application': False,
