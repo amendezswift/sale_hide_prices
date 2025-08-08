@@ -21,25 +21,24 @@
                   </div>
                 </div>
                 <!-- Órdenes de Producción asociadas -->
-                <t t-set="mos"
-                t-value="env['mrp.production'].sudo().search([
-                    ('procurement_group_id', '=', doc.procurement_group_id.id),
-                    ('company_id', '=', doc.company_id.id),
-                    ('state', '!=', 'cancel'),
-                ])"/>
+               <t t-set="mos"
+                  t-value="env['mrp.production'].sudo().search([
+                      ('state', '!=', 'cancel'),
+                      '|','|',
+                      ('move_finished_ids.group_id', '=', doc.procurement_group_id.id),
+                      ('origin', 'ilike', doc.name),
+                      ('procurement_group_id', '=', doc.procurement_group_id.id),
+                  ]).sorted('name')"/>
 
                 <t t-if="mos">
-                <p>
+                  <p>
                     <strong>Órdenes de Producción:</strong>
-                    <t t-foreach="mos" t-as="mo">
-                    <span t-esc="mo.name"/><t t-if="not loop.last">, </t>
-                    </t>
-                </p>
+                    <t t-esc="', '.join(mos.mapped('name'))"/>
+                  </p>
                 </t>
                 <t t-else="">
-                <!-- Nada si no hay MOs -->
+                  <p><strong>Órdenes de Producción:</strong> No hay órdenes asociadas.</p>
                 </t>
-
                 <!-- Tabla de líneas sin precios -->
                 <table class="table table-sm table-borderless">
                   <thead>
